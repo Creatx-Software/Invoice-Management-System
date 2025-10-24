@@ -1,0 +1,73 @@
+name: Deploy to cPanel via FTP
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install and build client
+      run: |
+        cd client
+        npm install
+        npm run build
+        
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm install --production
+
+    - name: Create deployment package
+      run: |
+        # Create a clean directory structure
+        mkdir -p deploy/server
+        mkdir -p deploy/client/build
+        
+        # Copy server files
+        cp -r server/* deploy/server/
+        
+        # Copy client build
+        cp -r client/build/* deploy/client/build/
+        
+        # Copy root files
+        cp package*.json deploy/ 2>/dev/null || true
+        
+        # Create .htaccess for React routing
+        cat > deploy/client/build/.htaccess << 'EOF'
+        <IfModule mod_rewrite.c>
+          RewriteEngine On
+          RewriteBase /
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_FILENAME} !-l
+          RewriteRule . /index.html [L]
+        </IfModule>
+        EOF
+
+    - name: Deploy to cPanel via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./deploy/
+        server-dir: ./
+        dangerous-clean-slate: false
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.env
