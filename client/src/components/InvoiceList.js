@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, FileText, Calendar, DollarSign, Search, Eye, Trash2 } from 'lucide-react';
 
 function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
@@ -7,11 +7,7 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchInvoices();
-  }, []);
-
-  const fetchInvoices = async () => {
+  const fetchInvoices = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:5000/api/invoices', {
         headers: {
@@ -31,7 +27,11 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [fetchInvoices]);
 
   const handleDeleteInvoice = async (invoiceId) => {
     if (!window.confirm('Are you sure you want to delete this invoice?')) return;

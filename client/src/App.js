@@ -229,11 +229,11 @@ function App() {
         companyName: companyLines[0] || '',
         companyAddress: companyLines.slice(1).join('\n') || '',
         companyEmail: companyLines.find(line => line.includes('@')) || '',
-        companyPhone: companyLines.find(line => /[\d\+\-\(\)]+/.test(line)) || '',
+        companyPhone: companyLines.find(line => /[\d+\-()]+/.test(line)) || '',
         clientName: clientLines[0] || '',
         clientAddress: clientLines.slice(1).join('\n') || '',
         clientEmail: clientLines.find(line => line.includes('@')) || '',
-        clientPhone: clientLines.find(line => /[\d\+\-\(\)]+/.test(line)) || '',
+        clientPhone: clientLines.find(line => /[\d+\-()]+/.test(line)) || '',
         items: invoice.items.map(item => ({
           description: item.description,
           quantity: parseFloat(item.quantity) || 0,
