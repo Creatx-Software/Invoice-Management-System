@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, FileText, Calendar, DollarSign, Search, Eye, Trash2 } from 'lucide-react';
+import config from '../config';
 
 function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
   const [invoices, setInvoices] = useState([]);
@@ -9,7 +10,7 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
 
   const fetchInvoices = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/invoices', {
+      const response = await fetch(`${config.API_BASE_URL}/api/invoices`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
     if (!window.confirm('Are you sure you want to delete this invoice?')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/invoices/${invoiceId}`, {
+      const response = await fetch(`${config.API_BASE_URL}/api/invoices/${invoiceId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,0 +1,19 @@
+{
+  "name": "invoice-management-system",
+  "version": "1.0.0",
+  "description": "Full-stack invoice management system",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm run build",
+    "start": "cd server && NODE_ENV=production npm start",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": ["invoice", "management", "fullstack"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

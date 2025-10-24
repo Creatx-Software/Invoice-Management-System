@@ -5,6 +5,7 @@ import PDFDocument from './components/PDFDocument';
 import Login from './components/Login';
 import InvoiceList from './components/InvoiceList';
 import Header from './components/Header';
+import config from './config';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -93,7 +94,7 @@ function App() {
 
   const handleEditInvoice = async (invoiceId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/invoices/${invoiceId}`, {
+      const response = await fetch(`${config.API_BASE_URL}/api/invoices/${invoiceId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -248,8 +249,8 @@ function App() {
       };
 
       const url = editingInvoiceId
-        ? `http://localhost:5000/api/invoices/${editingInvoiceId}`
-        : 'http://localhost:5000/api/invoices';
+        ? `${config.API_BASE_URL}/api/invoices/${editingInvoiceId}`
+        : `${config.API_BASE_URL}/api/invoices`;
 
       const method = editingInvoiceId ? 'PUT' : 'POST';
 
