@@ -3,7 +3,7 @@ import { LogOut, ArrowLeft, Save } from 'lucide-react';
 
 function Header({ user, onLogout, onBack, showBack = false, onSave, showSave = false, saveLabel = 'Save Invoice' }) {
   const handleLogout = () => {
-    if (confirm('Are you sure you want to logout?')) {
+    if (window.confirm('Are you sure you want to logout?')) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       onLogout();

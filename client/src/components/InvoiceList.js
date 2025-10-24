@@ -34,7 +34,7 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
   };
 
   const handleDeleteInvoice = async (invoiceId) => {
-    if (!confirm('Are you sure you want to delete this invoice?')) return;
+    if (!window.confirm('Are you sure you want to delete this invoice?')) return;
 
     try {
       const response = await fetch(`http://localhost:5000/api/invoices/${invoiceId}`, {
