@@ -328,62 +328,65 @@ function App() {
         showSave={true}
         saveLabel={editingInvoiceId ? (isSaving ? 'Updating...' : 'Update Invoice') : (isSaving ? 'Saving...' : 'Save Invoice')}
       />
-      <div className="min-h-screen bg-brand-primary py-12 px-4">
-        <div className="max-w-5xl mx-auto">
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-brand-secondary mb-3 uppercase tracking-wide">
-              {editingInvoiceId ? 'Edit Invoice' : 'Create New Invoice'}
+          <div className="text-center mb-8 animate-slide-up">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+              {editingInvoiceId ? 'Edit ' : 'Create New '}
+              <span className="text-gradient">Invoice</span>
             </h1>
-            <p className="text-green-100 text-sm md:text-base">
-              {editingInvoiceId ? 'Update your invoice details' : 'Create a professional invoice in minutes'}
+            <p className="text-gray-600 text-base">
+              {editingInvoiceId ? 'Update your invoice details below' : 'Fill in the details to generate a professional invoice'}
             </p>
           </div>
 
           {/* Main Form Card */}
-          <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8">
+          <div className="card-gradient p-8 md:p-10 animate-slide-up">
             {/* Row 1: Invoice Number, Purchase Order, Logo */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Invoice number
+                <label className="label-text">
+                  Invoice Number
                 </label>
                 <input
                   type="text"
                   value={invoice.invoiceNumber}
                   onChange={(e) => handleChange('invoiceNumber', e.target.value)}
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                  className="input-field-sm"
+                  placeholder="INV-001"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Purchase order
+                <label className="label-text">
+                  Purchase Order
                 </label>
                 <input
                   type="text"
                   value={invoice.purchaseOrder}
                   onChange={(e) => handleChange('purchaseOrder', e.target.value)}
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                  className="input-field-sm"
+                  placeholder="PO-001"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Logo
+                <label className="label-text">
+                  Company Logo
                   {invoice.logo && (
                     <button
                       onClick={removeLogo}
-                      className="ml-2 text-red-600 underline text-xs hover:text-red-700"
+                      className="ml-2 text-red-600 underline text-xs hover:text-red-700 transition-colors"
                     >
                       Remove
                     </button>
                   )}
                 </label>
                 {!invoice.logo ? (
-                  <label className="w-full h-[52px] flex items-center justify-center border-2 border-dashed border-brand-border rounded-lg cursor-pointer hover:border-green-500 transition-colors">
-                    <Upload className="w-5 h-5 text-gray-400" />
-                    <span className="ml-2 text-sm text-gray-500">Upload file</span>
+                  <label className="w-full h-[42px] flex items-center justify-center border-2 border-dashed border-brand-border rounded-lg cursor-pointer hover:border-brand-secondary hover:bg-blue-50 transition-all group">
+                    <Upload className="w-4 h-4 text-gray-400 group-hover:text-brand-secondary transition-colors" />
+                    <span className="ml-2 text-sm text-gray-500 group-hover:text-brand-secondary transition-colors">Upload Logo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -392,52 +395,52 @@ function App() {
                     />
                   </label>
                 ) : (
-                  <div className="w-full h-[120px] border border-brand-border rounded-lg overflow-hidden">
-                    <img src={invoice.logo} alt="Logo" className="w-full h-full object-contain" />
+                  <div className="w-full h-[120px] border-2 border-brand-border rounded-xl overflow-hidden bg-white shadow-inner-soft">
+                    <img src={invoice.logo} alt="Logo" className="w-full h-full object-contain p-2" />
                   </div>
                 )}
               </div>
             </div>
 
             {/* Row 2: Company Details & Bill To */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your company details
+                <label className="label-text">
+                  Your Company Details
                 </label>
                 <textarea
                   value={invoice.companyDetails}
                   onChange={(e) => handleChange('companyDetails', e.target.value)}
-                  rows="4"
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary resize-none"
-                  placeholder="Company name, address, contact info..."
+                  rows="5"
+                  className="input-field-sm resize-none"
+                  placeholder="Company name&#10;Street address&#10;Email address&#10;Phone number"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bill to
+                <label className="label-text">
+                  Bill To (Client Details)
                 </label>
                 <textarea
                   value={invoice.billTo}
                   onChange={(e) => handleChange('billTo', e.target.value)}
-                  rows="4"
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary resize-none"
-                  placeholder="Client name, address, contact info..."
+                  rows="5"
+                  className="input-field-sm resize-none"
+                  placeholder="Client name&#10;Street address&#10;Email address&#10;Phone number"
                 />
               </div>
             </div>
 
             {/* Row 3: Currency, Invoice Date, Due Date */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="label-text">
                   Currency
                 </label>
                 <select
                   value={invoice.currency}
                   onChange={(e) => handleChange('currency', e.target.value)}
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary appearance-none bg-white"
+                  className="input-field-sm appearance-none bg-white"
                 >
                   {currencies.map(curr => (
                     <option key={curr.code} value={curr.code}>
@@ -448,203 +451,233 @@ function App() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Invoice date
+                <label className="label-text">
+                  Invoice Date
                 </label>
                 <input
                   type="date"
                   value={invoice.invoiceDate}
                   onChange={(e) => handleChange('invoiceDate', e.target.value)}
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                  className="input-field-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Due date
+                <label className="label-text">
+                  Due Date
                 </label>
                 <input
                   type="date"
                   value={invoice.dueDate}
                   onChange={(e) => handleChange('dueDate', e.target.value)}
-                  className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                  className="input-field-sm"
                 />
               </div>
             </div>
 
             {/* Items Section */}
-            <div className="mb-6 bg-brand-items rounded-xl p-6">
-              <div className="grid grid-cols-12 gap-3 mb-4 text-sm font-medium text-gray-700">
-                <div className="col-span-5">Item description</div>
-                <div className="col-span-2 text-center">Unit cost</div>
+            <div className="mb-8 bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-secondary rounded-lg flex items-center justify-center">
+                  <Plus className="w-4 h-4 text-white" />
+                </div>
+                Invoice Items
+              </h3>
+
+              <div className="grid grid-cols-12 gap-3 mb-4 text-xs font-bold text-gray-600 uppercase">
+                <div className="col-span-5">Description</div>
+                <div className="col-span-2 text-center">Unit Cost</div>
                 <div className="col-span-2 text-center">Quantity</div>
                 <div className="col-span-2 text-right">Amount</div>
                 <div className="col-span-1"></div>
               </div>
 
-              {invoice.items.map((item, index) => (
-                <div key={index} className="grid grid-cols-12 gap-3 mb-3 items-center">
-                  <div className="col-span-5">
-                    <input
-                      type="text"
-                      value={item.description}
-                      onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                      className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-                      placeholder="Description"
-                    />
+              <div className="space-y-3">
+                {invoice.items.map((item, index) => (
+                  <div key={index} className="grid grid-cols-12 gap-3 items-center bg-gray-50 p-3 rounded-xl hover:bg-blue-50/50 transition-colors">
+                    <div className="col-span-5">
+                      <input
+                        type="text"
+                        value={item.description}
+                        onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                        className="input-field-sm"
+                        placeholder="Item description"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <input
+                        type="number"
+                        value={item.unitCost}
+                        onChange={(e) => handleItemChange(index, 'unitCost', e.target.value)}
+                        className="input-field-sm text-center"
+                        placeholder="0.00"
+                        step="0.01"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                        className="input-field-sm text-center"
+                        placeholder="0"
+                        step="1"
+                      />
+                    </div>
+                    <div className="col-span-2 text-right font-bold text-gray-900 text-lg">
+                      {(parseFloat(item.amount) || 0).toFixed(2)}
+                    </div>
+                    <div className="col-span-1 flex gap-1 justify-end">
+                      <button
+                        onClick={() => moveItemUp(index)}
+                        className="btn-icon text-brand-secondary"
+                        disabled={index === 0}
+                      >
+                        <ArrowUp className={`w-4 h-4 ${index === 0 ? 'text-gray-300' : 'text-brand-secondary'}`} />
+                      </button>
+                      <button
+                        onClick={() => removeItem(index)}
+                        className="btn-icon-danger text-red-600"
+                        disabled={invoice.items.length === 1}
+                      >
+                        <X className={`w-4 h-4 ${invoice.items.length === 1 ? 'text-gray-300' : 'text-red-600'}`} />
+                      </button>
+                    </div>
                   </div>
-                  <div className="col-span-2">
-                    <input
-                      type="number"
-                      value={item.unitCost}
-                      onChange={(e) => handleItemChange(index, 'unitCost', e.target.value)}
-                      className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary text-center"
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                      className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary text-center"
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className="col-span-2 text-right font-semibold">
-                    {(parseFloat(item.amount) || 0).toFixed(0)}
-                  </div>
-                  <div className="col-span-1 flex gap-1 justify-end">
-                    <button
-                      onClick={() => moveItemUp(index)}
-                      className="p-2 hover:bg-green-100 rounded-lg transition-colors"
-                      disabled={index === 0}
-                    >
-                      <ArrowUp className={`w-4 h-4 ${index === 0 ? 'text-gray-300' : 'text-green-600'}`} />
-                    </button>
-                    <button
-                      onClick={() => removeItem(index)}
-                      className="p-2 hover:bg-red-100 rounded-lg transition-colors"
-                      disabled={invoice.items.length === 1}
-                    >
-                      <X className={`w-4 h-4 ${invoice.items.length === 1 ? 'text-gray-300' : 'text-red-600'}`} />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
-              <div className="flex flex-col items-center mt-4">
+              <div className="flex justify-center mt-6">
                 <button
                   onClick={addItem}
-                  className="w-12 h-12 bg-brand-secondary hover:bg-brand-hover rounded-full flex items-center justify-center transition-colors shadow-sm mb-2"
+                  className="btn-secondary inline-flex items-center gap-2"
                 >
-                  <Plus className="w-5 h-5 text-brand-icon" />
+                  <Plus className="w-4 h-4" />
+                  Add Item
                 </button>
-                <span className="text-sm text-gray-700 font-medium">Add item</span>
               </div>
             </div>
 
             {/* Bottom Section: Notes & Totals */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
               {/* Left: Notes & Bank Details */}
               <div className="space-y-6 md:col-span-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Notes / payment terms
+                  <label className="label-text">
+                    Notes / Payment Terms
                   </label>
                   <textarea
                     value={invoice.notes}
                     onChange={(e) => handleChange('notes', e.target.value)}
-                    rows="4"
-                    className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary resize-none"
-                    placeholder="Payment terms, thank you note..."
+                    rows="5"
+                    className="input-field-sm resize-none"
+                    placeholder="Enter payment terms, thank you note, or additional information..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Bank account details
+                  <label className="label-text">
+                    Bank Account Details
                   </label>
                   <textarea
                     value={invoice.bankDetails}
                     onChange={(e) => handleChange('bankDetails', e.target.value)}
-                    rows="4"
-                    className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary resize-none"
-                    placeholder="Bank name, account number..."
+                    rows="5"
+                    className="input-field-sm resize-none"
+                    placeholder="Bank name&#10;Account number&#10;Routing number&#10;SWIFT/IBAN"
                   />
                 </div>
               </div>
 
               {/* Right: Totals */}
-              <div className="space-y-6 md:col-span-3 md:pl-8">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-600">Subtotal</div>
-                  <div className="text-xl font-bold text-gray-900">
-                    {subtotal.toFixed(2)} {invoice.currency}
-                  </div>
-                </div>
+              <div className="md:col-span-3">
+                <div className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 space-y-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 pb-3 border-b-2 border-gray-100">
+                    Invoice Summary
+                  </h3>
 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm text-gray-600">Tax %</label>
-                    <div className="relative w-48">
-                      <input
-                        type="number"
-                        value={invoice.taxRate}
-                        onChange={(e) => handleChange('taxRate', parseFloat(e.target.value) || 0)}
-                        className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary pr-8"
-                        placeholder="0"
-                      />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                  <div className="flex justify-between items-center py-2">
+                    <div className="text-sm font-medium text-gray-600">Subtotal</div>
+                    <div className="text-xl font-bold text-gray-900">
+                      {subtotal.toFixed(2)} {invoice.currency}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm text-gray-600">Discount ({invoice.currency})</label>
-                    <div className="w-48">
-                      <input
-                        type="number"
-                        value={invoice.discount}
-                        onChange={(e) => handleChange('discount', e.target.value)}
-                        className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-                        placeholder="0"
-                      />
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center gap-4">
+                      <label className="text-sm font-medium text-gray-600">Tax Rate</label>
+                      <div className="relative w-48">
+                        <input
+                          type="number"
+                          value={invoice.taxRate}
+                          onChange={(e) => handleChange('taxRate', parseFloat(e.target.value) || 0)}
+                          className="input-field-sm pr-10"
+                          placeholder="0"
+                          step="0.1"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center gap-4">
+                      <label className="text-sm font-medium text-gray-600">Discount ({invoice.currency})</label>
+                      <div className="w-48">
+                        <input
+                          type="number"
+                          value={invoice.discount}
+                          onChange={(e) => handleChange('discount', e.target.value)}
+                          className="input-field-sm"
+                          placeholder="0.00"
+                          step="0.01"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center gap-4">
+                      <label className="text-sm font-medium text-gray-600">Shipping Fee ({invoice.currency})</label>
+                      <div className="w-48">
+                        <input
+                          type="number"
+                          value={invoice.shippingFee}
+                          onChange={(e) => handleChange('shippingFee', e.target.value)}
+                          className="input-field-sm"
+                          placeholder="0.00"
+                          step="0.01"
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm text-gray-600">Shipping fee</label>
-                    <div className="w-48">
-                      <input
-                        type="number"
-                        value={invoice.shippingFee}
-                        onChange={(e) => handleChange('shippingFee', e.target.value)}
-                        className="w-full px-3 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-                        placeholder="0"
-                      />
+                  <div className="pt-4 mt-4 border-t-2 border-gray-200">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 flex justify-between items-center">
+                      <span className="text-xl font-bold text-gray-900">Total Amount</span>
+                      <span className="text-3xl font-bold text-gradient">
+                        {total.toFixed(2)} {invoice.currency}
+                      </span>
                     </div>
-                  </div>
-                </div>
-
-                <div className="pt-4 ">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-gray-900">Total</span>
-                    <span className="text-3xl font-bold text-gray-900">
-                      {total.toFixed(2)} {invoice.currency}
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+            <div className="flex flex-col sm:flex-row gap-4 mt-10 pt-8 border-t-2 border-gray-100">
               <button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
-                className="flex-1 py-2 bg-brand-secondary hover:bg-brand-hover text-brand-icon text-lg font-semibold rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                className="btn-secondary flex-1 justify-center text-lg"
               >
-                {isGenerating ? 'Generating...' : 'Download PDF'}
+                {isGenerating ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Generating PDF...
+                  </span>
+                ) : (
+                  'Download PDF'
+                )}
               </button>
             </div>
           </div>

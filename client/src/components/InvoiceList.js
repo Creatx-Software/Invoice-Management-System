@@ -70,10 +70,14 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-brand-primary py-12 px-4">
+      <div className="min-h-screen py-12 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="text-brand-secondary text-lg">Loading invoices...</div>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-blue-200 border-t-brand-secondary rounded-full animate-spin"></div>
+              <FileText className="w-8 h-8 text-brand-secondary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <p className="mt-6 text-gray-600 font-medium">Loading invoices...</p>
           </div>
         </div>
       </div>
@@ -81,35 +85,22 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
   }
 
   return (
-    <div className="min-h-screen bg-brand-primary py-12 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen py-8 px-4">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-brand-secondary mb-3 uppercase tracking-wide">
-            Invoice Management
-          </h1>
-          <p className="text-green-100 text-sm md:text-base">
-            Welcome back, {user.fullName}
-          </p>
-        </div>
-
-        {/* Controls */}
-        <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search invoices..."
-                className="w-full pl-10 pr-4 py-2 border border-brand-border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-              />
+        <div className="mb-8 animate-slide-up">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                Invoice <span className="text-gradient">Dashboard</span>
+              </h1>
+              <p className="text-gray-600 text-base flex items-center gap-2">
+                Welcome back, <span className="font-semibold text-brand-secondary">{user.fullName}</span>
+              </p>
             </div>
-
             <button
               onClick={onCreateNew}
-              className="flex items-center gap-2 px-6 py-2 bg-brand-secondary hover:bg-brand-hover text-brand-icon font-semibold rounded-lg transition-colors shadow-lg"
+              className="btn-primary flex items-center gap-2 self-start md:self-auto"
             >
               <Plus className="w-5 h-5" />
               Create New Invoice
@@ -117,27 +108,100 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
           </div>
         </div>
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-slide-up">
+          <div className="card-gradient">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Invoices</p>
+                <p className="text-3xl font-bold text-gray-900">{invoices.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-secondary rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+
+          <div className="card-gradient">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Paid</p>
+                <p className="text-3xl font-bold text-green-600">
+                  {invoices.filter(inv => inv.status === 'paid').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-success rounded-xl flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+
+          <div className="card-gradient">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Pending</p>
+                <p className="text-3xl font-bold text-blue-600">
+                  {invoices.filter(inv => inv.status === 'draft' || inv.status === 'sent').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+
+          <div className="card-gradient">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Overdue</p>
+                <p className="text-3xl font-bold text-red-600">
+                  {invoices.filter(inv => inv.status === 'overdue').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="card mb-6 animate-slide-up">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by invoice number or client name..."
+              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-secondary/30 focus:border-brand-secondary transition-all"
+            />
+          </div>
+        </div>
+
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-600">{error}</p>
+          <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6 animate-slide-down">
+            <p className="text-red-700 font-medium">{error}</p>
           </div>
         )}
 
         {/* Invoice List */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="card animate-slide-up overflow-hidden">
           {filteredInvoices.length === 0 ? (
-            <div className="text-center py-12">
-              <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            <div className="text-center py-16">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="w-12 h-12 text-brand-secondary" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 {searchTerm ? 'No invoices found' : 'No invoices yet'}
               </h3>
-              <p className="text-gray-500 mb-6">
-                {searchTerm ? 'Try adjusting your search terms' : 'Create your first invoice to get started'}
+              <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                {searchTerm ? 'Try adjusting your search terms to find what you\'re looking for' : 'Get started by creating your first professional invoice'}
               </p>
               {!searchTerm && (
                 <button
                   onClick={onCreateNew}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-brand-secondary hover:bg-brand-hover text-brand-icon font-semibold rounded-lg transition-colors shadow-lg"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   Create Your First Invoice
@@ -146,56 +210,58 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
+              <table className="table-modern">
+                <thead className="table-header">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Invoice</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Client</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Amount</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Invoice</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Client</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Date</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Amount</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Status</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredInvoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-gray-50">
+                  {filteredInvoices.map((invoice, index) => (
+                    <tr key={invoice.id} className="table-row" style={{animationDelay: `${index * 0.05}s`}}>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <FileText className="w-5 h-5 text-brand-primary" />
+                          <div className="w-10 h-10 bg-gradient-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+                            <FileText className="w-5 h-5 text-white" />
+                          </div>
                           <div>
-                            <div className="font-semibold text-gray-900">{invoice.invoice_number}</div>
+                            <div className="font-bold text-gray-900">{invoice.invoice_number}</div>
                             <div className="text-sm text-gray-500">{invoice.item_count} items</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-gray-900">{invoice.client_name}</div>
+                        <div className="font-semibold text-gray-900">{invoice.client_name}</div>
                         {invoice.client_email && (
                           <div className="text-sm text-gray-500">{invoice.client_email}</div>
                         )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2 text-gray-700">
-                          <Calendar className="w-4 h-4" />
-                          {formatDate(invoice.invoice_date)}
+                          <Calendar className="w-4 h-4 text-brand-secondary" />
+                          <span className="font-medium">{formatDate(invoice.invoice_date)}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 font-semibold text-gray-900">
-                          <DollarSign className="w-4 h-4" />
+                        <div className="flex items-center gap-1 font-bold text-gray-900 text-lg">
+                          <DollarSign className="w-5 h-5 text-brand-success" />
                           {formatCurrency(invoice.total_amount)}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                        <span className={`badge ${
                           invoice.status === 'paid'
-                            ? 'bg-green-100 text-green-800'
+                            ? 'badge-success'
                             : invoice.status === 'sent'
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'badge-info'
                             : invoice.status === 'overdue'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-gray-100 text-gray-800'
+                            ? 'badge-danger'
+                            : 'bg-gray-100 text-gray-800 border-gray-200'
                         }`}>
                           {invoice.status}
                         </span>
@@ -204,17 +270,17 @@ function InvoiceList({ onCreateNew, onEditInvoice, user, token }) {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => onEditInvoice(invoice.id)}
-                            className="p-2 text-brand-primary hover:bg-green-100 rounded-lg transition-colors"
+                            className="btn-icon text-brand-secondary"
                             title="View/Edit Invoice"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-5 h-5" />
                           </button>
                           <button
                             onClick={() => handleDeleteInvoice(invoice.id)}
-                            className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                            className="btn-icon-danger text-red-600"
                             title="Delete Invoice"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       </td>
